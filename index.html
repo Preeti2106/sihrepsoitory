@@ -1,0 +1,1767 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scheme Saarthi - Government Scheme Finder Portal</title>
+    <style>
+        /* Simple Traditional Government Portal Styling (Elderly Friendly) */
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #f4f6f8;
+            color: #222222;
+            margin: 0;
+            padding: 0;
+            font-size: 18px;
+            line-height: 1.5;
+        }
+
+        /* Top Government Header */
+        header {
+            background-color: #003366;
+            color: #ffffff;
+            padding: 15px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 5px solid #ffcc00;
+        }
+
+        .header-title-box h1 {
+            margin: 0;
+            font-size: 26px;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+        }
+
+        .header-title-box p {
+            margin: 4px 0 0 0;
+            font-size: 15px;
+            color: #ffdd66;
+        }
+
+        .header-controls {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .lang-select {
+            font-size: 18px;
+            font-weight: bold;
+            padding: 8px 12px;
+            border: 2px solid #ffcc00;
+            border-radius: 6px;
+            background-color: #ffffff;
+            color: #003366;
+            cursor: pointer;
+        }
+
+        .user-status-badge {
+            background-color: #ffcc00;
+            color: #003366;
+            padding: 8px 14px;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        /* Navigation Bar */
+        nav {
+            background-color: #004080;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 5px;
+            padding: 8px;
+        }
+
+        .nav-tab {
+            background-color: #ffffff;
+            color: #003366;
+            border: 2px solid #003366;
+            padding: 12px 18px;
+            font-size: 17px;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .nav-tab.active {
+            background-color: #ffcc00;
+            color: #000000;
+            border-color: #cc9900;
+        }
+
+        /* Main Container */
+        .main-container {
+            max-width: 980px;
+            margin: 25px auto;
+            background-color: #ffffff;
+            border: 2px solid #cccccc;
+            border-radius: 8px;
+            padding: 25px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .page-section {
+            display: none;
+        }
+
+        .page-section.active {
+            display: block;
+        }
+
+        h2 {
+            color: #003366;
+            font-size: 24px;
+            border-bottom: 3px solid #003366;
+            padding-bottom: 10px;
+            margin-top: 0;
+        }
+
+        /* Form Controls */
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 6px;
+            font-size: 17px;
+            color: #111111;
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 11px;
+            font-size: 17px;
+            border: 2px solid #888888;
+            border-radius: 6px;
+            background-color: #ffffff;
+        }
+
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            border-color: #003366;
+            outline: 3px solid #ffcc00;
+        }
+
+        /* Standard Simple Buttons */
+        .btn {
+            font-size: 17px;
+            font-weight: bold;
+            padding: 11px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            display: inline-block;
+            text-align: center;
+            text-decoration: none;
+        }
+
+        .btn-primary { background-color: #003366; color: #ffffff; }
+        .btn-success { background-color: #28a745; color: #ffffff; }
+        .btn-warning { background-color: #ff9900; color: #000000; }
+        .btn-info { background-color: #17a2b8; color: #ffffff; }
+        .btn-secondary { background-color: #6c757d; color: #ffffff; }
+        .btn-govt-link { background-color: #0056b3; color: #ffffff; border: 1px solid #003366; }
+
+        .btn:hover { opacity: 0.9; }
+
+        /* Banner & Alert Boxes */
+        .info-box {
+            background-color: #e8f4f8;
+            border-left: 6px solid #003366;
+            padding: 15px;
+            margin-bottom: 20px;
+            font-size: 17px;
+        }
+
+        .alert-box {
+            background-color: #fff3cd;
+            border-left: 6px solid #ffc107;
+            padding: 15px;
+            margin-bottom: 20px;
+            font-size: 17px;
+        }
+
+        /* Scheme Cards */
+        .scheme-card {
+            border: 2px solid #dddddd;
+            background-color: #fafafa;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .scheme-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #eeeeee;
+            padding-bottom: 10px;
+            margin-bottom: 12px;
+        }
+
+        .scheme-title {
+            font-size: 21px;
+            color: #003366;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        .match-badge {
+            background-color: #28a745;
+            color: #ffffff;
+            font-size: 18px;
+            font-weight: bold;
+            padding: 6px 14px;
+            border-radius: 20px;
+        }
+
+        .scheme-details p {
+            margin: 6px 0;
+            font-size: 17px;
+        }
+
+        .scheme-actions {
+            margin-top: 15px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        /* Application Tracker Progress Line */
+        .tracker-progress {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            margin: 30px 0;
+        }
+
+        .tracker-progress::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 10%;
+            right: 10%;
+            height: 4px;
+            background-color: #cccccc;
+            z-index: 1;
+        }
+
+        .tracker-step {
+            position: relative;
+            z-index: 2;
+            background-color: #ffffff;
+            text-align: center;
+            padding: 0 10px;
+            width: 25%;
+        }
+
+        .step-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background-color: #cccccc;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 8px auto;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .tracker-step.completed .step-icon { background-color: #28a745; }
+        .tracker-step.active .step-icon { background-color: #ff9900; }
+        .tracker-step.pending .step-icon { background-color: #6c757d; }
+
+        /* Chatbox Styles */
+        .chat-container {
+            border: 2px solid #cccccc;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+            height: 380px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+        }
+
+        .message {
+            margin-bottom: 12px;
+            max-width: 80%;
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-size: 17px;
+        }
+
+        .message.user {
+            background-color: #003366;
+            color: #ffffff;
+            margin-left: auto;
+            border-bottom-right-radius: 0;
+        }
+
+        .message.govt {
+            background-color: #e9ecef;
+            color: #222222;
+            border: 1px solid #cccccc;
+            margin-right: auto;
+            border-bottom-left-radius: 0;
+        }
+
+        .chat-input-bar {
+            display: flex;
+            padding: 10px;
+            border-top: 2px solid #cccccc;
+            background-color: #ffffff;
+            gap: 10px;
+        }
+
+        /* Modal Overlay */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.6);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background-color: #ffffff;
+            padding: 25px;
+            border-radius: 8px;
+            max-width: 580px;
+            width: 90%;
+            border: 3px solid #003366;
+        }
+
+        /* Quick questions buttons */
+        .quick-btn {
+            background-color: #e7f1ff;
+            color: #004080;
+            border: 1px solid #b6d4fe;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 15px;
+            cursor: pointer;
+            margin: 4px;
+            display: inline-block;
+        }
+        .quick-btn:hover { background-color: #cfe2ff; }
+    </style>
+</head>
+<body>
+
+    <!-- Top Header -->
+    <header>
+        <div class="header-title-box">
+            <h1 id="lbl_app_title">Scheme Saarthi</h1>
+            <p id="lbl_app_subtitle">National AI Scheme Matching & Citizen Assistance Portal</p>
+        </div>
+        <div class="header-controls">
+            <div>
+                <label for="langSelect" style="font-weight:bold; color:#fff; font-size:15px; display:block;" id="lbl_select_lang">Select Language:</label>
+                <select id="langSelect" class="lang-select" onchange="changeLanguage()">
+                    <option value="en-IN">English</option>
+                    <option value="hi-IN">हिन्दी (Hindi)</option>
+                    <option value="mr-IN">मराठी (Marathi)</option>
+                    <option value="ta-IN">தமிழ் (Tamil)</option>
+                </select>
+            </div>
+            <div id="userBadge" class="user-status-badge">Not Logged In</div>
+        </div>
+    </header>
+
+    <!-- Main Navigation Bar -->
+    <nav>
+        <button class="nav-tab active" onclick="switchTab('sec-auth')" id="nav_auth">1. Login / Sign Up</button>
+        <button class="nav-tab" onclick="switchTab('sec-profile')" id="nav_profile">2. Profile & Scan Docs</button>
+        <button class="nav-tab" onclick="switchTab('sec-schemes')" id="nav_schemes">3. Matched Schemes</button>
+        <button class="nav-tab" onclick="switchTab('sec-tracker')" id="nav_tracker">4. Application Tracker</button>
+        <button class="nav-tab" onclick="switchTab('sec-chatbox')" id="nav_chatbox">5. Govt Support Chat</button>
+        <button class="nav-tab" onclick="switchTab('sec-csc')" id="nav_csc">6. CSC Centers & Calculator</button>
+    </nav>
+
+    <!-- Content Area -->
+    <div class="main-container">
+
+        <!-- STEP 1: USER REGISTRATION / SIGN IN / OTP -->
+        <div id="sec-auth" class="page-section active">
+            <h2 id="title_auth">Step 1: Citizen Login / Create Account</h2>
+            
+            <div class="info-box">
+                <strong id="auth_info_title">Welcome to Scheme Saarthi!</strong><br>
+                <span id="auth_info_desc">Enter your Mobile Phone and details to Sign In or Create a new Citizen Account.</span>
+            </div>
+
+            <div style="max-width: 500px; margin: 0 auto; border: 2px solid #003366; padding: 20px; border-radius: 8px; background-color: #fafafa;">
+                <div class="form-group">
+                    <label id="lbl_phone">Mobile Phone Number:</label>
+                    <input type="tel" id="regPhone" placeholder="Enter 10-digit mobile number" value="9876543210">
+                </div>
+
+                <div class="form-group">
+                    <label id="lbl_fullname">Full Name:</label>
+                    <input type="text" id="regName" placeholder="Enter your full name" value="Ramesh Kumar">
+                </div>
+
+                <div class="form-group">
+                    <label id="lbl_password">Account Password:</label>
+                    <input type="password" id="regPassword" placeholder="Create or enter password" value="123456">
+                </div>
+
+                <button class="btn btn-primary" style="width: 100%; margin-top: 10px;" onclick="triggerOTPModal()" id="btn_send_otp">Send Mobile OTP Code</button>
+            </div>
+        </div>
+
+        <!-- STEP 2: PROFILE & MOCK DOCUMENT SCANNING -->
+        <div id="sec-profile" class="page-section">
+            <h2 id="title_profile">Step 2: Citizen Profile & Document OCR</h2>
+
+            <div class="alert-box">
+                <strong id="scan_box_title">Quick Fill via Aadhaar / Document Scan:</strong><br>
+                <span id="scan_box_desc">Click "Mock Scan Aadhaar Card" to automatically scan your identity card and pre-fill details!</span>
+                <div style="margin-top: 12px; display: flex; gap: 10px;">
+                    <button class="btn btn-warning" onclick="simulateDocumentScan()" id="btn_scan_doc">📷 Mock Scan Aadhaar/Ration Card</button>
+                    <button class="btn btn-info" onclick="startVoiceInput()" id="btn_voice_profile">🎙️ Voice Input (Speak Profile Details)</button>
+                </div>
+                <div id="voiceStatus" style="font-weight: bold; color: #003366; margin-top: 8px;"></div>
+            </div>
+
+            <form id="profileForm" onsubmit="saveProfile(event)">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label id="lbl_p_name">Full Name:</label>
+                        <input type="text" id="profName" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label id="lbl_p_age">Age (Years):</label>
+                        <input type="number" id="profAge" value="42" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label id="lbl_p_gender">Gender:</label>
+                        <select id="profGender" onchange="autoUpdateSchemesOnProfileChange()">
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label id="lbl_p_occ">Occupation / Sector (Select to see different schemes):</label>
+                        <select id="profOccupation" style="border: 3px solid #003366; background-color: #ffffdd;" onchange="autoUpdateSchemesOnProfileChange()">
+                            <option value="Farmer">Farmer (कृषक)</option>
+                            <option value="Street Vendor">Street Vendor / Micro Entrepreneur (फेरीवाला)</option>
+                            <option value="Artisan">Artisan / Weaver / Handicraft (कारीगर / बुनकर)</option>
+                            <option value="Construction Worker">Construction Worker (निर्माण मजदूर)</option>
+                            <option value="Unemployed Youth">Unemployed Youth (बेरोजगार युवा)</option>
+                            <option value="Student">Student (छात्र)</option>
+                            <option value="Senior Citizen">Senior Citizen (वरिष्ठ नागरिक)</option>
+                            <option value="Small Business Owner">Small Business Owner (लघु व्यवसायी)</option>
+                            <option value="Woman Entrepreneur">Woman Entrepreneur / Self-Help Group (महिला उद्यमी)</option>
+                            <option value="Dairy / Fisheries">Dairy / Fisheries / Animal Husbandry (पशुपालन / मत्स्य)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label id="lbl_p_income">Annual Family Income:</label>
+                        <select id="profIncome" onchange="autoUpdateSchemesOnProfileChange()">
+                            <option value="Below 1 Lakh">Below ₹1,00,000 (Under ₹1 Lakh)</option>
+                            <option value="1-2.5 Lakhs">₹1,00,000 - ₹2,50,000 (1 - 2.5 Lakhs)</option>
+                            <option value="2.5-5 Lakhs">₹2,50,000 - ₹5,00,000 (2.5 - 5 Lakhs)</option>
+                            <option value="Above 5 Lakhs">Above ₹5,00,000 (Above 5 Lakhs)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label id="lbl_p_category">Social Category:</label>
+                        <select id="profCategory" onchange="autoUpdateSchemesOnProfileChange()">
+                            <option value="General">General</option>
+                            <option value="OBC">OBC (Other Backward Classes)</option>
+                            <option value="SC">SC (Scheduled Caste)</option>
+                            <option value="ST">ST (Scheduled Tribe)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label id="lbl_p_state">State of Residence:</label>
+                        <select id="profState" onchange="autoUpdateSchemesOnProfileChange()">
+                            <option value="Maharashtra">Maharashtra</option>
+                            <option value="Uttar Pradesh">Uttar Pradesh</option>
+                            <option value="Tamil Nadu">Tamil Nadu</option>
+                            <option value="Bihar">Bihar</option>
+                            <option value="Rajasthan">Rajasthan</option>
+                            <option value="Gujarat">Gujarat</option>
+                            <option value="Karnataka">Karnataka</option>
+                            <option value="Other">Other State</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label id="lbl_p_family">Family Members Count:</label>
+                        <select id="profFamilyMembers" onchange="autoUpdateSchemesOnProfileChange()">
+                            <option value="1-3 Members">1 to 3 Members</option>
+                            <option value="4-6 Members" selected>4 to 6 Members</option>
+                            <option value="7+ Members">7 or more Members</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label id="lbl_p_source">Primary Source of Income:</label>
+                        <select id="profIncomeSource" onchange="autoUpdateSchemesOnProfileChange()">
+                            <option value="Daily Wages">Daily Wages / Casual Labour</option>
+                            <option value="Agriculture">Agriculture & Farming</option>
+                            <option value="Self Employed">Self Employed / Micro Trade</option>
+                            <option value="Salary">Fixed Monthly Salary</option>
+                            <option value="Pension">Pension / Financial Support</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label id="lbl_p_edu">Educational Qualification:</label>
+                        <select id="profEducation" onchange="autoUpdateSchemesOnProfileChange()">
+                            <option value="Below 10th">Below 10th Standard / Non-Formal</option>
+                            <option value="10th Pass">10th Class Passed</option>
+                            <option value="12th Pass">12th Class Passed</option>
+                            <option value="Graduate">Graduate / Diploma / Higher</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label id="lbl_p_disability">Disability Status (Divyangjan):</label>
+                        <select id="profDisability" onchange="autoUpdateSchemesOnProfileChange()">
+                            <option value="No">No Disability</option>
+                            <option value="Yes">Yes (Differently Abled / Divyangjan)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label id="lbl_p_loan">Existing Active Bank Loan:</label>
+                        <select id="profLoan" onchange="autoUpdateSchemesOnProfileChange()">
+                            <option value="No">No Active Loan</option>
+                            <option value="Yes">Yes (Currently Have Active Bank Loan)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-success" style="width: 100%; margin-top: 15px; font-size: 20px;" id="btn_save_profile">💾 Save Profile & View Tailored Schemes</button>
+            </form>
+        </div>
+
+        <!-- STEP 3: AI SCHEME MATCHING -->
+        <div id="sec-schemes" class="page-section">
+            <h2 id="title_schemes">Step 3: Recommended Government Schemes for You</h2>
+
+            <div class="info-box">
+                <strong id="schemes_info_title">Dynamic AI Percentage Match & Official Links:</strong><br>
+                <span id="schemes_info_desc">Schemes strictly update based on your selected Occupation & Profile in your chosen language.</span>
+            </div>
+
+            <div id="schemesList">
+                <!-- Dynamically Populated -->
+            </div>
+        </div>
+
+        <!-- STEP 4: APPLICATION TRACKER -->
+        <div id="sec-tracker" class="page-section">
+            <h2 id="title_tracker">Step 4: Live Application Status Tracker</h2>
+
+            <div class="info-box">
+                <strong id="tracker_info_title">Track your submitted scheme application:</strong><br>
+                <span id="tracker_info_desc">Enter your 12-digit Application Reference ID or select a demo application below.</span>
+            </div>
+
+            <div style="background-color: #fafafa; border: 2px solid #003366; padding: 20px; border-radius: 8px; max-width: 650px; margin: 0 auto;">
+                <div class="form-group">
+                    <label id="lbl_track_input">Enter Application Reference ID:</label>
+                    <div style="display: flex; gap: 10px;">
+                        <input type="text" id="trackInput" placeholder="e.g. SCH-2026-894102" value="SCH-2026-894102" style="font-weight: bold; letter-spacing: 1px;">
+                        <button class="btn btn-primary" onclick="trackApplication()" id="btn_do_track">Track Status</button>
+                    </div>
+                </div>
+
+                <div style="margin-top: 10px;">
+                    <span style="font-size: 15px; font-weight: bold;" id="lbl_quick_demo">Quick Track Demo IDs:</span><br>
+                    <button class="quick-btn" onclick="quickTrack('SCH-2026-894102')">SCH-2026-894102 (PM-SVANidhi)</button>
+                    <button class="quick-btn" onclick="quickTrack('SCH-2026-551029')">SCH-2026-551029 (PM-KISAN)</button>
+                    <button class="quick-btn" onclick="quickTrack('SCH-2026-339104')">SCH-2026-339104 (PM Vishwakarma)</button>
+                </div>
+            </div>
+
+            <!-- Tracker Output Results -->
+            <div id="trackerResults" style="margin-top: 25px; border: 2px solid #cccccc; border-radius: 8px; padding: 20px; background-color: #ffffff;">
+                <div style="display: flex; justify-content: space-between; border-bottom: 2px solid #eee; padding-bottom: 10px;">
+                    <div>
+                        <strong style="color:#003366; font-size: 20px;" id="trackSchemeTitle">PM SVANidhi Loan Application</strong><br>
+                        <span>Ref ID: <strong id="trackRefId">SCH-2026-894102</strong> | Applicant: <strong id="trackApplicantName">Ramesh Kumar</strong></span>
+                    </div>
+                    <div>
+                        <span style="background-color:#ff9900; color:#000; font-weight:bold; padding: 6px 12px; border-radius: 6px;" id="trackStatusBadge">Status: In Progress</span>
+                    </div>
+                </div>
+
+                <!-- Timeline Bar -->
+                <div class="tracker-progress">
+                    <div class="tracker-step completed" id="tstep1">
+                        <div class="step-icon">✓</div>
+                        <strong style="font-size: 15px;" id="tslabel1">Application Submitted</strong>
+                        <div style="font-size: 13px; color:#666;">15 Sept 2026</div>
+                    </div>
+                    <div class="tracker-step completed" id="tstep2">
+                        <div class="step-icon">✓</div>
+                        <strong style="font-size: 15px;" id="tslabel2">Aadhaar & e-KYC Verified</strong>
+                        <div style="font-size: 13px; color:#666;">18 Sept 2026</div>
+                    </div>
+                    <div class="tracker-step active" id="tstep3">
+                        <div class="step-icon">⏳</div>
+                        <strong style="font-size: 15px;" id="tslabel3">CSC Biometric Audit</strong>
+                        <div style="font-size: 13px; color:#666;">Under Review</div>
+                    </div>
+                    <div class="tracker-step pending" id="tstep4">
+                        <div class="step-icon">💳</div>
+                        <strong style="font-size: 15px;" id="tslabel4">Bank DBT Credit</strong>
+                        <div style="font-size: 13px; color:#666;">Expected 02 Oct</div>
+                    </div>
+                </div>
+
+                <div style="background-color: #e8f4f8; padding: 15px; border-radius: 6px; border-left: 5px solid #003366;" id="trackRemarks">
+                    <strong>Official Remarks:</strong> Biometric identity verified at Jan Seva Kendra. Final municipal clearance in progress.
+                </div>
+            </div>
+        </div>
+
+        <!-- STEP 5: GOVT QUERY & REJECTION RESOLUTION CHATBOX -->
+        <div id="sec-chatbox" class="page-section">
+            <h2 id="title_chatbox">Step 5: Government Application Help & Rejection Resolution</h2>
+
+            <div class="info-box">
+                <strong id="chat_info_title">Have questions about your submitted application?</strong><br>
+                <span id="chat_info_desc">Ask the AI Government Assistance Bot why your application was delayed or rejected.</span>
+            </div>
+
+            <div style="margin-bottom: 12px;">
+                <span style="font-weight: bold; font-size: 16px;" id="lbl_chat_sample">Quick Sample Questions:</span><br>
+                <button class="quick-btn" onclick="sendQuickQuery('Why is my PM-SVANidhi loan application status pending?')">Why is my PM-SVANidhi status pending?</button>
+                <button class="quick-btn" onclick="sendQuickQuery('Why was my PM-Kisan installment rejected?')">Why was my PM-Kisan installment rejected?</button>
+                <button class="quick-btn" onclick="sendQuickQuery('What documents are required to re-submit?')">What documents are required to re-submit?</button>
+                <button class="quick-btn" onclick="sendQuickQuery('How long does CSC physical verification take?')">How long does CSC verification take?</button>
+            </div>
+
+            <div class="chat-container">
+                <div class="chat-messages" id="chatMessages">
+                    <div class="message govt" id="msg_govt_welcome">
+                        <strong>Govt Support Assistant:</strong> Namaste! Welcome to Scheme Saarthi Application Helpdesk. Please enter your Application Ref Number or ask any question regarding rejected or delayed scheme applications.
+                    </div>
+                </div>
+                <div class="chat-input-bar">
+                    <input type="text" id="chatInput" placeholder="Type your question or objection here..." onkeypress="if(event.key==='Enter') sendChatMessage()">
+                    <button class="btn btn-primary" onclick="sendChatMessage()" id="btn_send_chat">Send Query</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- STEP 6: CSC LOCATOR & FINANCIAL CALCULATOR -->
+        <div id="sec-csc" class="page-section">
+            <h2 id="title_csc">Step 6: Nearby CSC Service Centers & Subsidy Calculator</h2>
+
+            <div class="alert-box">
+                <strong id="lbl_csc_banner_title">Assisted CSC Application & Document Scanning Centers:</strong><br>
+                <span id="lbl_csc_banner_desc">Visit your nearest Common Service Center for biometric verification and document scanning.</span>
+            </div>
+
+            <!-- CSC Centers List -->
+            <h3 style="color:#003366; margin-top:20px;" id="lbl_csc_near_title">Registered Common Service Centers (CSCs) Near You:</h3>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;" id="cscListGrid">
+                <div style="border: 2px solid #cccccc; border-radius: 8px; padding: 15px; background-color: #fafafa;">
+                    <strong style="color: #003366; font-size: 18px;">CSC Jan Seva Kendra - Central Market</strong>
+                    <p style="margin: 5px 0;">📍 Shop #12, Main Bazaar, Central District (0.8 km away)</p>
+                    <p style="margin: 5px 0;">📞 Contact: +91 98765 43210</p>
+                    <p style="margin: 5px 0;">✅ Services: Document Scanning, Aadhaar e-KYC, Bio-metric Verification</p>
+                    <button class="btn btn-primary" style="margin-top: 8px; font-size: 15px;" onclick="alert('Appointment booked at CSC Jan Seva Kendra!')">Book Appointment</button>
+                </div>
+
+                <div style="border: 2px solid #cccccc; border-radius: 8px; padding: 15px; background-color: #fafafa;">
+                    <strong style="color: #003366; font-size: 18px;">CSC Digital Seva Hub - North Zone</strong>
+                    <p style="margin: 5px 0;">📍 Plot 45, Near Post Office, North Zone (1.5 km away)</p>
+                    <p style="margin: 5px 0;">📞 Contact: +91 98765 43211</p>
+                    <p style="margin: 5px 0;">✅ Services: Application Submission, Bio-metric, Print Certificates</p>
+                    <button class="btn btn-primary" style="margin-top: 8px; font-size: 15px;" onclick="alert('Appointment booked at CSC Digital Seva Hub!')">Book Appointment</button>
+                </div>
+
+                <div style="border: 2px solid #cccccc; border-radius: 8px; padding: 15px; background-color: #fafafa;">
+                    <strong style="color: #003366; font-size: 18px;">CSC Suvidha Kendra - Bus Station</strong>
+                    <p style="margin: 5px 0;">📍 Gate #2, Bus Station Complex (2.2 km away)</p>
+                    <p style="margin: 5px 0;">📞 Contact: +91 98765 43212</p>
+                    <p style="margin: 5px 0;">✅ Services: High Speed Scanning, Mobile Linking, e-SHRAM</p>
+                    <button class="btn btn-primary" style="margin-top: 8px; font-size: 15px;" onclick="alert('Appointment booked at CSC Suvidha Kendra!')">Book Appointment</button>
+                </div>
+
+                <div style="border: 2px solid #cccccc; border-radius: 8px; padding: 15px; background-color: #fafafa;">
+                    <strong style="color: #003366; font-size: 18px;">CSC Gramin e-Seva Point</strong>
+                    <p style="margin: 5px 0;">📍 Panchayat Bhavan, Gramin Division (3.1 km away)</p>
+                    <p style="margin: 5px 0;">📞 Contact: +91 98765 43213</p>
+                    <p style="margin: 5px 0;">✅ Services: PM-Kisan KYC, Bank Account Link, Ration Renewal</p>
+                    <button class="btn btn-primary" style="margin-top: 8px; font-size: 15px;" onclick="alert('Appointment booked at CSC Gramin Point!')">Book Appointment</button>
+                </div>
+
+                <div style="border: 2px solid #cccccc; border-radius: 8px; padding: 15px; background-color: #fafafa;">
+                    <strong style="color: #003366; font-size: 18px;">CSC Citizen Facilitation Center</strong>
+                    <p style="margin: 5px 0;">📍 Block B, Civil Lines Area (4.0 km away)</p>
+                    <p style="margin: 5px 0;">📞 Contact: +91 98765 43214</p>
+                    <p style="margin: 5px 0;">✅ Services: Senior Citizen Schemes Assistance, Document Scanning</p>
+                    <button class="btn btn-primary" style="margin-top: 8px; font-size: 15px;" onclick="alert('Appointment booked at CSC Facilitation Center!')">Book Appointment</button>
+                </div>
+
+                <div style="border: 2px solid #cccccc; border-radius: 8px; padding: 15px; background-color: #fafafa;">
+                    <strong style="color: #003366; font-size: 18px;">CSC Tehsil Seva Kendra</strong>
+                    <p style="margin: 5px 0;">📍 Opposite Tehsildar Court Office (5.2 km away)</p>
+                    <p style="margin: 5px 0;">📞 Contact: +91 98765 43215</p>
+                    <p style="margin: 5px 0;">✅ Services: Legal Document Attestation, Govt Loan Processing</p>
+                    <button class="btn btn-primary" style="margin-top: 8px; font-size: 15px;" onclick="alert('Appointment booked at CSC Tehsil Seva Kendra!')">Book Appointment</button>
+                </div>
+            </div>
+
+            <!-- Financial Calculator -->
+            <hr style="margin: 30px 0; border: 1px solid #003366;">
+
+            <h3 style="color:#003366;" id="lbl_calc_title">Financial Loan & Subsidy Calculator:</h3>
+            <div style="background-color: #eef5fc; border: 2px solid #003366; padding: 20px; border-radius: 8px;">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label id="lbl_calc_loan">Required Loan Amount (₹):</label>
+                        <input type="number" id="calcLoan" value="100000" step="5000">
+                    </div>
+                    <div class="form-group">
+                        <label id="lbl_calc_sub">Government Subsidy Rate (%):</label>
+                        <select id="calcSubsidy">
+                            <option value="35">35% Subsidy (PMEGP Rural SC/ST/Women)</option>
+                            <option value="25">25% Subsidy (PMEGP Urban/General)</option>
+                            <option value="10">10% Subsidy (PM SVANidhi Cash-back)</option>
+                            <option value="15">15% Subsidy (Agri Loan Subvention)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label id="lbl_calc_tenure">Loan Tenure (Years):</label>
+                        <select id="calcTenure">
+                            <option value="1">1 Year</option>
+                            <option value="3" selected>3 Years</option>
+                            <option value="5">5 Years</option>
+                            <option value="7">7 Years</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label id="lbl_calc_rate">Annual Interest Rate (%):</label>
+                        <input type="number" id="calcRate" value="7" step="0.5">
+                    </div>
+                </div>
+
+                <button class="btn btn-success" style="width: 100%; font-size: 18px;" onclick="calculateSubsidy()" id="btn_calc_submit">Calculate Scheme Benefits & Estimated Monthly EMI</button>
+
+                <div id="calcResult" style="margin-top: 15px; padding: 15px; background-color: #ffffff; border: 2px dashed #003366; border-radius: 6px; display: none;">
+                    <!-- Result output -->
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- OTP Simulation Modal -->
+    <div id="otpModal" class="modal">
+        <div class="modal-content">
+            <h3 style="color: #003366; margin-top:0;">📱 Mobile OTP Verification</h3>
+            <p>A verification SMS code has been generated for phone: <strong id="modalPhoneNum"></strong></p>
+            <div style="background-color: #fff3cd; border: 1px solid #ffebabaa; padding: 10px; margin-bottom: 15px; border-radius: 4px; text-align: center;">
+                <strong>Demo Mock Verification Code: <span style="font-size:24px; color:#d9534f; letter-spacing: 2px;">1234</span></strong>
+            </div>
+
+            <div class="form-group">
+                <label>Enter 4-Digit Code:</label>
+                <input type="text" id="otpCode" placeholder="Enter 1234" style="text-align: center; font-size: 22px; letter-spacing: 4px;">
+            </div>
+
+            <div style="display: flex; gap: 10px; margin-top: 15px;">
+                <button class="btn btn-success" style="flex:1;" onclick="verifyOTP()">Verify OTP & Login</button>
+                <button class="btn btn-secondary" onclick="closeOTPModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Direct Self Apply Modal -->
+    <div id="applyModal" class="modal">
+        <div class="modal-content">
+            <h3 style="color: #003366; margin-top:0;" id="applyModalTitle">Direct Application Submission</h3>
+            <p>You are applying for: <strong id="applySchemeName"></strong></p>
+            <div class="form-group">
+                <label>Aadhaar / Identity Number:</label>
+                <input type="text" value="XXXX-XXXX-8910" readonly style="background-color: #eee;">
+            </div>
+            <div class="form-group">
+                <label>Bank Account Number for Subsidy Direct Benefit Transfer (DBT):</label>
+                <input type="text" value="STATE BANK OF INDIA - 30894726190" readonly style="background-color: #eee;">
+            </div>
+            <div style="display: flex; gap: 10px; margin-top: 15px;">
+                <button class="btn btn-success" style="flex:1;" onclick="confirmApplicationSubmit()">Confirm & Submit Application Now</button>
+                <button class="btn btn-secondary" onclick="document.getElementById('applyModal').style.display='none'">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Application Logic -->
+    <script>
+        // Database of Schemes with Multi-Language Translations (EN, HI, MR, TA)
+        const SCHEME_DATABASE = [
+            {
+                id: 1,
+                occupation: ["Street Vendor", "Micro Entrepreneur"],
+                maxIncome: "2.5-5 Lakhs",
+                state: "All",
+                loanAllowed: "Yes",
+                websiteUrl: "https://pmsvanidhi.mohua.gov.in/",
+                title: {
+                    "en-IN": "PM SVANidhi (PM Street Vendor's AtmaNirbhar Nidhi)",
+                    "hi-IN": "पीएम स्वनिधि (पीएम स्ट्रीट वेंडर आत्मनिर्भर निधि)",
+                    "mr-IN": "पीएम स्वनिधी (पथविक्रेता आत्मनिर्भर निधी)",
+                    "ta-IN": "பிஎம் ஸ்வாநிதி தெரு வியாபாரிகள் நிதி"
+                },
+                benefit: {
+                    "en-IN": "Collateral-free working capital loan up to ₹50,000 with 7% interest subsidy & cash-back incentives.",
+                    "hi-IN": "₹50,000 तक का बिना गारंटी कार्यशील पूंजी ऋण 7% ब्याज सब्सिडी और कैश-बैक के साथ।",
+                    "mr-IN": "७% व्याज अनुदानासह ₹५०,००० पर्यंतचे बिनव्याजी भांडवली कर्ज व कॅशबॅक सवलत.",
+                    "ta-IN": "7% வட்டி மானியத்துடன் ₹50,000 வரை பிணையமில்லா வேலை மூலதனக் கடன்."
+                },
+                requirements: {
+                    "en-IN": "Street vending certificate or letter of recommendation from local municipal body.",
+                    "hi-IN": "स्थानीय निकाय द्वारा जारी शहरी विक्रेता प्रमाण पत्र या सिफारिश पत्र।",
+                    "mr-IN": "स्थानिक पालिकेचे विक्रेते प्रमाणपत्र किंवा शिफारस पत्र.",
+                    "ta-IN": "உள்ளாட்சி அமைப்பின் தெரு வியாபார சான்றிதழ்."
+                }
+            },
+            {
+                id: 2,
+                occupation: ["Farmer", "Dairy / Fisheries"],
+                maxIncome: "2.5-5 Lakhs",
+                state: "All",
+                loanAllowed: "Yes",
+                websiteUrl: "https://pmkisan.gov.in/",
+                title: {
+                    "en-IN": "PM-KISAN (Pradhan Mantri Kisan Samman Nidhi)",
+                    "hi-IN": "पीएम-किसान सम्मान निधि योजना",
+                    "mr-IN": "पीएम-किसान सन्मान निधी योजना",
+                    "ta-IN": "பிஎம்-கிசான் சம்மான் நிதி திட்டம்"
+                },
+                benefit: {
+                    "en-IN": "Direct income support of ₹6,000 per year transferred in 3 equal installments to landholding farmers.",
+                    "hi-IN": "भूमिधारक किसानों को प्रति वर्ष ₹6,000 की सीधी आय सहायता 3 समान किश्तों में।",
+                    "mr-IN": "जमीनधारक शेतकरी कुटुंबांना दरवर्षी ₹६,००० चे थेट बँक खात्यात उत्पादन सहाय्य.",
+                    "ta-IN": "நில உரிமையாளர் விவசாயிகளுக்கு ஆண்டுக்கு ₹6,000 நேரடி பண உதவி."
+                },
+                requirements: {
+                    "en-IN": "Cultivable land ownership record (7/12 extract) linked with Aadhaar e-KYC.",
+                    "hi-IN": "आधार ई-केवाईसी से जुड़ी कृषि भूमि स्वामित्व दस्तावेज (7/12 खसरा)।",
+                    "mr-IN": "आधार ई-केवायसीशी जोडलेला ७/१२ जमीन मालकी दाखला.",
+                    "ta-IN": "ஆதாருடன் இணைக்கப்பட்ட விவசாய நிலப் பட்டா சான்று."
+                }
+            },
+            {
+                id: 3,
+                occupation: ["Artisan"],
+                maxIncome: "2.5-5 Lakhs",
+                state: "All",
+                loanAllowed: "Yes",
+                websiteUrl: "https://pmvishwakarma.gov.in/",
+                title: {
+                    "en-IN": "PM Vishwakarma Scheme",
+                    "hi-IN": "पीएम विश्वकर्मा योजना (पारंपरिक कारीगर प्रोत्साहन)",
+                    "mr-IN": "पीएम विश्वकर्मा योजना (पारंपरिक कारागीर विकास)",
+                    "ta-IN": "பிஎம் விஸ்வகர்மா திட்டம்"
+                },
+                benefit: {
+                    "en-IN": "₹15,000 toolkit incentive, free skill training, and loan up to ₹3 Lakhs at 5% interest.",
+                    "hi-IN": "कारीगरों के लिए ₹15,000 टूलकिट प्रोत्साहन, मुफ्त प्रशिक्षण और 5% ब्याज पर ₹3 लाख तक ऋण।",
+                    "mr-IN": "कारागिरांसाठी ₹१५,००० टूलकिट प्रोत्साहन, मोफत प्रशिक्षण व ५% व्याजाने ₹३ लाखांपर्यंत कर्ज.",
+                    "ta-IN": "கைவினைஞர்களுக்கு ₹15,000 உபகரண ஊக்கம் & 5% வட்டியில் ₹3 லட்சம் வரை கடன்."
+                },
+                requirements: {
+                    "en-IN": "Traditional artisan / craftsman working in one of 18 specified trades.",
+                    "hi-IN": "18 निर्दिष्ट पारंपरिक शिल्पकला/कारीगरी व्यवसायों में कार्य करने वाले व्यक्ति।",
+                    "mr-IN": "१८ निर्दिष्ट पारंपरिक कारागिरी व्यवसायांपैकी एकातील कारागीर.",
+                    "ta-IN": "குறிப்பிட்ட 18 பாரம்பரிய கைவினைத் தொழில்களில் ஈடுபடுபவர்கள்."
+                }
+            },
+            {
+                id: 4,
+                occupation: ["Small Business Owner", "Woman Entrepreneur", "Unemployed Youth"],
+                maxIncome: "Above 5 Lakhs",
+                state: "All",
+                loanAllowed: "No",
+                websiteUrl: "https://www.kviconline.gov.in/pmegpeportal/",
+                title: {
+                    "en-IN": "PMEGP (Prime Minister's Employment Generation Programme)",
+                    "hi-IN": "पीएमईजीपी (प्रधानमंत्री रोजगार सृजन कार्यक्रम)",
+                    "mr-IN": "पीएमईजीपी (पंतप्रधान रोजगार निर्मिती कार्यक्रम)",
+                    "ta-IN": "பிஎம்இஜிபி பிரதமர் வேலைவாய்ப்பு திட்டம்"
+                },
+                benefit: {
+                    "en-IN": "Capital subsidy up to 35% for setting up new micro-enterprises in manufacturing or service sector.",
+                    "hi-IN": "नए सूक्ष्म उद्योग स्थापित करने के लिए लागत का 35% तक का पूंजीगत सरकारी अनुदान।",
+                    "mr-IN": "नवीन सूक्ष्म उद्योग उभारणीसाठी ३५% पर्यंत भांडवली शासकीय अनुदान.",
+                    "ta-IN": "புதிய தொழில் தொடங்க திட்ட செலவில் 35% வரை மூலதன மானியம்."
+                },
+                requirements: {
+                    "en-IN": "Above 18 years age, minimum 8th pass for projects above ₹10 Lakhs.",
+                    "hi-IN": "18 वर्ष से अधिक आयु, ₹10 लाख से ऊपर की परियोजना के लिए न्यूनतम 8वीं पास।",
+                    "mr-IN": "वय १८ वर्षांपेक्षा जास्त, ₹१० लाखांवरील प्रकल्पासाठी किमान ८वी उत्तीर्ण.",
+                    "ta-IN": "18 வயதுக்கு மேல், ₹10 லட்சத்திற்கு மேற்பட்ட திட்டங்களுக்கு 8-ஆம் வகுப்பு கல்வி."
+                }
+            },
+            {
+                id: 5,
+                occupation: ["Small Business Owner", "Street Vendor", "Artisan"],
+                maxIncome: "Above 5 Lakhs",
+                state: "All",
+                loanAllowed: "Yes",
+                websiteUrl: "https://www.mudra.org.in/",
+                title: {
+                    "en-IN": "Mudra Loan Yojana (Tarun / Kishor / Shishu)",
+                    "hi-IN": "प्रधानमंत्री मुद्रा ऋण योजना",
+                    "mr-IN": "पंतप्रधान मुद्रा कर्ज योजना",
+                    "ta-IN": "பிரதமர் முத்ரா கடன் திட்டம்"
+                },
+                benefit: {
+                    "en-IN": "Loans up to ₹10 Lakhs for non-corporate micro units without collateral requirement.",
+                    "hi-IN": "बिना किसी गारंटी के लघु उद्योगों और व्यापार के लिए ₹10 लाख तक का बैंक ऋण।",
+                    "mr-IN": "कोणत्याही तारण हमीशिवाय लघु व्यवसायासाठी ₹१० लाखांपर्यंतचे बँक कर्ज.",
+                    "ta-IN": "பிணையம் இல்லாமல் சிறு வணிகங்களுக்கு ₹10 லட்சம் வரை வங்கி கடன்."
+                },
+                requirements: {
+                    "en-IN": "Business plan & identity/address proof.",
+                    "hi-IN": "व्यापार योजना दस्तावेज एवं पहचान व पते का प्रमाण।",
+                    "mr-IN": "व्यवसाय योजना आणि ओळख/पत्ता पुरावा.",
+                    "ta-IN": "தொழில் திட்டம் மற்றும் அடையாள சான்று."
+                }
+            },
+            {
+                id: 6,
+                occupation: ["Construction Worker", "Farmer", "Street Vendor", "Artisan"],
+                maxIncome: "Below 1 Lakh",
+                state: "All",
+                loanAllowed: "Yes",
+                websiteUrl: "https://pmaymis.gov.in/",
+                title: {
+                    "en-IN": "PM Awas Yojana (Gramin / Urban Housing)",
+                    "hi-IN": "पीएम आवास योजना (पक्का मकान सहायता)",
+                    "mr-IN": "पीएम आवास योजना (घरकुल अनुदान)",
+                    "ta-IN": "பிஎம் ஆவாஸ் வீட்டு வசதி திட்டம்"
+                },
+                benefit: {
+                    "en-IN": "Financial assistance up to ₹1.3 Lakhs for pucca house construction with toilet facility.",
+                    "hi-IN": "कच्चे मकान में रहने वाले परिवारों को पक्का मकान बनाने हेतु ₹1.3 लाख की सहायता।",
+                    "mr-IN": "पक्के घर बांधण्यासाठी कुटुंबांना ₹१.३ लाखांपर्यंतचे थेट अर्थसहाय्य.",
+                    "ta-IN": "நிரந்தர வீடு கட்ட ₹1.3 லட்சம் வரை நிதி உதவி."
+                },
+                requirements: {
+                    "en-IN": "Families living in kutcha / dilapidated house without permanent home.",
+                    "hi-IN": "कच्चे घर में रहने वाले और स्वयं के पक्के मकान रहित गरीब परिवार।",
+                    "mr-IN": "स्वतःचे पक्के घर नसलेली कच्च्या घरात राहणारी कुटुंबे.",
+                    "ta-IN": "சொந்த வீடு இல்லாத ஏழைக் குடும்பங்கள்."
+                }
+            },
+            {
+                id: 7,
+                occupation: ["Woman Entrepreneur", "Construction Worker", "Farmer"],
+                maxIncome: "1-2.5 Lakhs",
+                state: "All",
+                loanAllowed: "Yes",
+                websiteUrl: "https://pmmvy.nic.in/",
+                title: {
+                    "en-IN": "PM Matru Vandana Yojana (PMMVY)",
+                    "hi-IN": "पीएम मातृ वंदना योजना (गर्भवती महिला सहायता)",
+                    "mr-IN": "पीएम मातृ वंदना योजना (माता आरोग्य अनुदान)",
+                    "ta-IN": "பிஎம் மாத்ரு வந்தனா திட்டம்"
+                },
+                benefit: {
+                    "en-IN": "Cash incentive of ₹6,000 directly to bank accounts of pregnant women and lactating mothers.",
+                    "hi-IN": "गर्भवती महिलाओं और माताओं के पोषण हेतु ₹6,000 का सीधा नकद हस्तांतरण।",
+                    "mr-IN": "गरोदर महिला व स्तनदा मातांच्या पोषण सुधारासाठी ₹६,००० चा थेट नकद लाभ.",
+                    "ta-IN": "கர்ப்பிணி பெண்கள் மற்றும் தாய்மார்களுக்கு ₹6,000 நேரடி பண உதவி."
+                },
+                requirements: {
+                    "en-IN": "Mother's Aadhaar linked bank account & MCP Card.",
+                    "hi-IN": "माता का आधार लिंक बैंक खाता और मातृ एवं शिशु सुरक्षा कार्ड।",
+                    "mr-IN": "मातेचे आधार जोडलेले बँक खाते आणि आरोग्य कार्ड.",
+                    "ta-IN": "ஆதாருடன் இணைக்கப்பட்ட தாய் வங்கி கணக்கு."
+                }
+            },
+            {
+                id: 8,
+                occupation: ["Senior Citizen", "Unemployed Youth", "Farmer"],
+                maxIncome: "2.5-5 Lakhs",
+                state: "All",
+                loanAllowed: "Yes",
+                websiteUrl: "https://www.npscra.nsdl.co.in/",
+                title: {
+                    "en-IN": "Atal Pension Yojana (APY Pension Guarantee)",
+                    "hi-IN": "अटल पेंशन योजना (गारंटीकृत मासिक पेंशन)",
+                    "mr-IN": "अटल पेन्शन योजना (हमी पेन्शन योजना)",
+                    "ta-IN": "அடல் ஓய்வூதிய திட்டம்"
+                },
+                benefit: {
+                    "en-IN": "Guaranteed monthly pension of ₹1,000 to ₹5,000 per month upon reaching 60 years of age.",
+                    "hi-IN": "60 वर्ष की आयु पूर्ण होने पर ₹1,000 से ₹5,000 प्रति माह की आजीवन पेंशन।",
+                    "mr-IN": "वयाच्या ६० वर्षांनंतर दरमहा ₹१,००० ते ₹५,००० ची निश्चित पेन्शन.",
+                    "ta-IN": "60 வயதுக்கு மேல் மாதம் ₹1,000 முதல் ₹5,000 வரை ஆயுள் ஓய்வூதியம்."
+                },
+                requirements: {
+                    "en-IN": "Savings bank account & subscriber age between 18 and 40 years.",
+                    "hi-IN": "बचत बैंक खाता धारक और 18 से 40 वर्ष की आयु सीमा।",
+                    "mr-IN": "बँक खातेधारक आणि वय १८ ते ४० वर्षे.",
+                    "ta-IN": "வங்கி கணக்கு மற்றும் வயது 18 முதல் 40 வரை."
+                }
+            }
+        ];
+
+        // Global Dictionary for Full Interface Translation
+        const DICTIONARY = {
+            "en-IN": {
+                appTitle: "Scheme Saarthi",
+                appSubtitle: "National AI Scheme Matching & Citizen Assistance Portal",
+                notLoggedIn: "Not Logged In",
+                loggedInAs: "Logged in: Ramesh Kumar",
+                tabAuth: "1. Login / Sign Up",
+                tabProfile: "2. Profile & Scan Docs",
+                tabSchemes: "3. Matched Schemes",
+                tabTracker: "4. Application Tracker",
+                tabChatbox: "5. Govt Support Chat",
+                tabCsc: "6. CSC Centers & Calculator",
+                titleAuth: "Step 1: Citizen Login / Create Account",
+                authInfoTitle: "Welcome to Scheme Saarthi!",
+                authInfoDesc: "Enter your Mobile Phone and details to Sign In or Create a new Citizen Account.",
+                lblPhone: "Mobile Phone Number:",
+                lblFullname: "Full Name:",
+                lblPassword: "Account Password:",
+                btnSendOtp: "Send Mobile OTP Code",
+                titleProfile: "Step 2: Citizen Profile & Document OCR",
+                scanBoxTitle: "Quick Fill via Aadhaar / Document Scan:",
+                scanBoxDesc: "Click 'Mock Scan Aadhaar Card' to automatically scan your identity card and pre-fill details!",
+                btnScanDoc: "📷 Mock Scan Aadhaar/Ration Card",
+                btnVoiceProfile: "🎙️ Voice Input (Speak Profile Details)",
+                lblPName: "Full Name:",
+                lblPAge: "Age (Years):",
+                lblPGender: "Gender:",
+                lblPOcc: "Occupation / Sector (Select to see different schemes):",
+                lblPIncome: "Annual Family Income:",
+                lblPCategory: "Social Category:",
+                lblPState: "State of Residence:",
+                lblPFamily: "Family Members Count:",
+                lblPSource: "Primary Source of Income:",
+                lblPEdu: "Educational Qualification:",
+                lblPDisability: "Disability Status (Divyangjan):",
+                lblPLoan: "Existing Active Bank Loan:",
+                btnSaveProfile: "💾 Save Profile & View Tailored Schemes",
+                titleSchemes: "Step 3: Recommended Government Schemes for You",
+                schemesInfoTitle: "Dynamic AI Percentage Match & Official Links:",
+                schemesInfoDesc: "Schemes strictly update based on your selected Occupation & Profile in your chosen language.",
+                titleTracker: "Step 4: Live Application Status Tracker",
+                trackerInfoTitle: "Track your submitted scheme application:",
+                trackerInfoDesc: "Enter your 12-digit Application Reference ID or select a demo application below.",
+                lblTrackInput: "Enter Application Reference ID:",
+                btnDoTrack: "Track Status",
+                lblQuickDemo: "Quick Track Demo IDs:",
+                tstep1: "Application Submitted",
+                tstep2: "Aadhaar & e-KYC Verified",
+                tstep3: "CSC Biometric Audit",
+                tstep4: "Bank DBT Credit",
+                trackRemarks: "Biometric identity verified at Jan Seva Kendra. Final municipal clearance in progress.",
+                titleChatbox: "Step 5: Government Application Help & Rejection Resolution",
+                chatInfoTitle: "Have questions about your submitted application?",
+                chatInfoDesc: "Ask the AI Government Assistance Bot why your application was delayed or rejected.",
+                lblChatSample: "Quick Sample Questions:",
+                btnSendChat: "Send Query",
+                titleCsc: "Step 6: Nearby CSC Service Centers & Subsidy Calculator",
+                cscBannerTitle: "Assisted CSC Application & Document Scanning Centers:",
+                cscBannerDesc: "Visit your nearest Common Service Center for biometric verification and document scanning.",
+                cscNearTitle: "Registered Common Service Centers (CSCs) Near You:",
+                calcTitle: "Financial Loan & Subsidy Calculator:",
+                calcLoan: "Required Loan Amount (₹):",
+                calcSub: "Government Subsidy Rate (%):",
+                calcTenure: "Loan Tenure (Years):",
+                calcRate: "Annual Interest Rate (%):",
+                btnCalcSubmit: "Calculate Scheme Benefits & Estimated Monthly EMI",
+                btnGovtLink: "🔗 Official Govt Website",
+                btnAudioRead: "🔊 Read Out Loud",
+                btnApplyNow: "📝 Self Apply Online Now",
+                matchedFor: "Directly matched for your selected occupation:"
+            },
+            "hi-IN": {
+                appTitle: "स्कीम सारथी",
+                appSubtitle: "राष्ट्रीय एआई योजना मिलान एवं नागरिक सहायता पोर्टल",
+                notLoggedIn: "लॉगिन नहीं किया है",
+                loggedInAs: "लॉगिन: रमेश कुमार",
+                tabAuth: "1. लॉगिन / साइन अप",
+                tabProfile: "2. प्रोफाइल एवं दस्तावेज स्कैन",
+                tabSchemes: "3. आपके लिए योग्य योजनाएं",
+                tabTracker: "4. आवेदन स्थिति ट्रैकर",
+                tabChatbox: "5. सरकारी सहायता चैट",
+                tabCsc: "6. सीएससी केंद्र एवं कैलकुलेटर",
+                titleAuth: "चरण 1: नागरिक लॉगिन / नया खाता बनाएं",
+                authInfoTitle: "स्कीम सारथी में आपका स्वागत है!",
+                authInfoDesc: "साइन इन करने या नया खाता बनाने के लिए अपना मोबाइल नंबर और विवरण दर्ज करें।",
+                lblPhone: "मोबाइल फोन नंबर:",
+                lblFullname: "पूरा नाम:",
+                lblPassword: "खाता पासवर्ड:",
+                btnSendOtp: "मोबाइल ओटीपी कोड भेजें",
+                titleProfile: "चरण 2: नागरिक प्रोफाइल एवं दस्तावेज स्कैन",
+                scanBoxTitle: "आधार / दस्तावेज स्कैन द्वारा त्वरित भरें:",
+                scanBoxDesc: "विवरण स्वतः भरने के लिए 'आधार कार्ड स्कैन करें' पर क्लिक करें!",
+                btnScanDoc: "📷 आधार/राशन कार्ड स्कैन करें",
+                btnVoiceProfile: "🎙️ आवाज द्वारा बोलकर भरें",
+                lblPName: "पूरा नाम:",
+                lblPAge: "आयु (वर्ष):",
+                lblPGender: "लिंग:",
+                lblPOcc: "व्यवसाय / क्षेत्र (अलग योजनाएं देखने हेतु चुनें):",
+                lblPIncome: "वार्षिक पारिवारिक आय:",
+                lblPCategory: "सामाजिक श्रेणी:",
+                lblPState: "निवास का राज्य:",
+                lblPFamily: "परिवार के सदस्यों की संख्या:",
+                lblPSource: "आय का मुख्य स्रोत:",
+                lblPEdu: "शैक्षणिक योग्यता:",
+                lblPDisability: "दिव्यांगता स्थिति:",
+                lblPLoan: "वर्तमान सक्रिय बैंक ऋण:",
+                btnSaveProfile: "💾 प्रोफाइल सहेजें एवं योजनाएं देखें",
+                titleSchemes: "चरण 3: आपके लिए अनुशंसित सरकारी योजनाएं",
+                schemesInfoTitle: "एआई प्रतिशत मिलान एवं आधिकारिक वेबसाइट लिंक:",
+                schemesInfoDesc: "आपकी चयनित भाषा और व्यवसाय के आधार पर योजनाएं स्वतः अपडेट होती हैं।",
+                titleTracker: "चरण 4: लाइव आवेदन स्थिति ट्रैकर",
+                trackerInfoTitle: "अपने जमा किए गए आवेदन की स्थिति ट्रैक करें:",
+                trackerInfoDesc: "अपना 12 अंकों का संदर्भ आईडी दर्ज करें या नीचे डेमो आईडी चुनें।",
+                lblTrackInput: "आवेदन संदर्भ आईडी दर्ज करें:",
+                btnDoTrack: "स्थिति ट्रैक करें",
+                lblQuickDemo: "त्वरित डेमो आईडी:",
+                tstep1: "आवेदन जमा किया गया",
+                tstep2: "आधार एवं ई-केवाईसी सत्यापित",
+                tstep3: "सीएससी बायोमेट्रिक ऑडिट",
+                tstep4: "बैंक डीबीटी जमा",
+                trackRemarks: "जन सेवा केंद्र में बायोमेट्रिक सत्यापन पूरा हुआ। अंतिम स्वीकृति प्रगति पर है।",
+                titleChatbox: "चरण 5: सरकारी आवेदन सहायता एवं शिकायत निवारण",
+                chatInfoTitle: "क्या आपके जमा किए गए आवेदन के बारे में कोई प्रश्न है?",
+                chatInfoDesc: "एआई सहायक से पूछें कि आपका आवेदन लंबित या अस्वीकृत क्यों हुआ।",
+                lblChatSample: "त्वरित नमूना प्रश्न:",
+                btnSendChat: "प्रश्न भेजें",
+                titleCsc: "चरण 6: निकटतम सीएससी केंद्र एवं सब्सिडी कैलकुलेटर",
+                cscBannerTitle: "सहायता प्राप्त सीएससी केंद्र एवं दस्तावेज स्कैनिंग:",
+                cscBannerDesc: "बायोमेट्रिक सत्यापन और स्कैनिंग के लिए निकटतम जन सेवा केंद्र पर जाएं।",
+                cscNearTitle: "आपके निकट पंजीकृत कॉमन सर्विस सेंटर (CSC):",
+                calcTitle: "वित्तीय ऋण एवं सब्सिडी कैलकुलेटर:",
+                calcLoan: "आवश्यक ऋण राशि (₹):",
+                calcSub: "सरकारी सब्सिडी दर (%):",
+                calcTenure: "ऋण अवधि (वर्ष):",
+                calcRate: "वार्षिक ब्याज दर (%):",
+                btnCalcSubmit: "योजना लाभ एवं मासिक किस्त (EMI) की गणना करें",
+                btnGovtLink: "🔗 आधिकारिक सरकारी वेबसाइट",
+                btnAudioRead: "🔊 बोलकर सुनें",
+                btnApplyNow: "📝 सीधे ऑनलाइन आवेदन करें",
+                matchedFor: "आपके चुने हुए व्यवसाय हेतु विशेष रूप से योग्य:"
+            },
+            "mr-IN": {
+                appTitle: "स्कीम सारथी",
+                appSubtitle: "राष्ट्रीय एआय योजना जुळवणी आणि नागरिक मदत पोर्टल",
+                notLoggedIn: "लॉगिन केलेले नाही",
+                loggedInAs: "लॉगिन: रमेश कुमार",
+                tabAuth: "1. लॉगिन / खाते उघडा",
+                tabProfile: "2. प्रोफाइल आणि कागदपत्रे स्कॅन",
+                tabSchemes: "3. तुमच्यासाठी योग्य योजना",
+                tabTracker: "4. अर्ज स्थिती ट्रॅकर",
+                tabChatbox: "5. शासकीय मदत चॅट",
+                tabCsc: "6. सीएससी केंद्र आणि कॅल्क्युलेटर",
+                titleAuth: "टप्पा १: नागरिक लॉगिन / खाते तयार करा",
+                authInfoTitle: "स्कीम सारथी मध्ये आपले स्वागत आहे!",
+                authInfoDesc: "लॉगिन करण्यासाठी किंवा नवीन खाते उघडण्यासाठी तुमचा मोबाईल नंबर टाका.",
+                lblPhone: "मोबाईल फोन नंबर:",
+                lblFullname: "पूर्ण नाव:",
+                lblPassword: "पासवर्ड:",
+                btnSendOtp: "मोबाईल ओटीपी पाठवा",
+                titleProfile: "टप्पा २: नागरिक प्रोफाइल आणि कागदपत्रे स्कॅन",
+                scanBoxTitle: "आधार स्कॅनद्वारे जलद माहिती भरा:",
+                scanBoxDesc: "माहिती आपोआप भरण्यासाठी 'आधार कार्ड स्कॅन करा' वर क्लिक करा!",
+                btnScanDoc: "📷 आधार/रेशन कार्ड स्कॅन करा",
+                btnVoiceProfile: "🎙️ आवाजाने बोलून माहिती भरा",
+                lblPName: "पूर्ण नाव:",
+                lblPAge: "वय (वर्षे):",
+                lblPGender: "लिंग:",
+                lblPOcc: "व्यवसाय / क्षेत्र (वेगळ्या योजना पाहण्यासाठी निवडा):",
+                lblPIncome: "वार्षिक कौटुंबिक उत्पन्न:",
+                lblPCategory: "सामाजिक वर्ग:",
+                lblPState: "राज्य:",
+                lblPFamily: "कुटुंबातील सदस्य संख्या:",
+                lblPSource: "उत्पन्नाचा मुख्य स्रोत:",
+                lblPEdu: "शिक्षण:",
+                lblPDisability: "दिव्यांगत्व स्थिती:",
+                lblPLoan: "सध्याचे बँक कर्ज:",
+                btnSaveProfile: "💾 माहिती जतन करा आणि योजना पहा",
+                titleSchemes: "टप्पा ३: तुमच्यासाठी शिफारस केलेल्या सरकारी योजना",
+                schemesInfoTitle: "एआय टक्केवारी जुळवणी आणि अधिकृत वेबसाईट:",
+                schemesInfoDesc: "तुमच्या निवडलेल्या भाषेत आणि व्यवसायानुसार योजना आपोआप अपडेट होतात.",
+                titleTracker: "टप्पा ४: थेट अर्ज स्थिती ट्रॅकर",
+                trackerInfoTitle: "तुमच्या अर्जाची सद्यस्थिती तपासा:",
+                trackerInfoDesc: "तुमचा १२ अंकी अर्ज आयडी टाका किंवा खालील डेमो आयडी निवडा.",
+                lblTrackInput: "अर्ज संदर्भ आयडी टाका:",
+                btnDoTrack: "स्थिती तपासा",
+                lblQuickDemo: "जलद डेमो आयडी:",
+                tstep1: "अर्ज सादर केला",
+                tstep2: "आधार व ई-केवायसी प्रमाणित",
+                tstep3: "सीएससी बायोमेट्रिक तपासणी",
+                tstep4: "बँक डीबीटी जमा",
+                trackRemarks: "जन सेवा केंद्रात बायोमेट्रिक पडताळणी पूर्ण झाली. अंतिम मंजुरी प्रक्रियेत आहे.",
+                titleChatbox: "टप्पा ५: शासकीय अर्ज मदत आणि तक्रार निवारण",
+                chatInfoTitle: "अर्जाबद्दल काही प्रश्न आहेत का?",
+                chatInfoDesc: "तुमचा अर्ज का लांबला किंवा नाकारला गेला हे एआय सहाय्यकाला विचारा.",
+                lblChatSample: "नमूना प्रश्न:",
+                btnSendChat: "प्रश्न पाठवा",
+                titleCsc: "टप्पा ६: जवळचे सीएससी केंद्र आणि कॅल्क्युलेटर",
+                cscBannerTitle: "सीएससी केंद्र आणि कागदपत्र स्कॅनिंग:",
+                cscBannerDesc: "बायोमेट्रिक पडताळणीसाठी जवळच्या जन सेवा केंद्राला भेट द्या.",
+                cscNearTitle: "तुमच्या जवळील नोंदणीकृत कॉमन सर्व्हिस सेंटर (CSC):",
+                calcTitle: "कर्ज आणि अनुदान कॅल्क्युलेटर:",
+                calcLoan: "आवश्यक कर्ज रक्कम (₹):",
+                calcSub: "सरकारी अनुदान दर (%):",
+                calcTenure: "कर्ज कालावधी (वर्षे):",
+                calcRate: "वार्षिक व्याजदर (%):",
+                btnCalcSubmit: "योजना लाभ आणि हप्त्याची (EMI) गणना करा",
+                btnGovtLink: "🔗 अधिकृत सरकारी वेबसाईट",
+                btnAudioRead: "🔊 आवाजात ऐका",
+                btnApplyNow: "📝 थेट ऑनलाईन अर्ज करा",
+                matchedFor: "तुमच्या व्यवसायासाठी विशेष योग्य:"
+            },
+            "ta-IN": {
+                appTitle: "ஸ்கீம் சாரதி",
+                appSubtitle: "தேசிய AI திட்டப் பொருத்தம் மற்றும் குடிமக்கள் உதவி இணையதளம்",
+                notLoggedIn: "லாகின் செய்யப்படவில்லை",
+                loggedInAs: "லாகின்: ரமேஷ் குமார்",
+                tabAuth: "1. உள்நுழைவு / பதிவு",
+                tabProfile: "2. சுயவிவரம் & ஆவணங்கள் ஸ்கேன்",
+                tabSchemes: "3. உங்களுக்கான திட்டங்கள்",
+                tabTracker: "4. விண்ணப்ப நிலை டிராக்கர்",
+                tabChatbox: "5. அரசு உதவி அரட்டை",
+                tabCsc: "6. CSC மையங்கள் & கணக்கிடு",
+                titleAuth: "படி 1: குடிமக்கள் உள்நுழைவு / பதிவு",
+                authInfoTitle: "ஸ்கீம் சாரதிக்கு வரவேற்கிறோம்!",
+                authInfoDesc: "உங்கள் மொபைல் எண் மற்றும் விவரங்களை உள்ளிடவும்.",
+                lblPhone: "மொபைல் போன் எண்:",
+                lblFullname: "முழு பெயர்:",
+                lblPassword: "கடவுச்சொல்:",
+                btnSendOtp: "மொபைல் OTP அனுப்பு",
+                titleProfile: "படி 2: சுயவிவரம் & ஆவணங்கள் ஸ்கேன்",
+                scanBoxTitle: "ஆதார் ஸ்கேன் மூலம் விரைவாக நிரப்பவும்:",
+                scanBoxDesc: "உங்கள் விவரங்களை தானாக நிரப்ப 'ஆதார் ஸ்கேன்' கிளிக் செய்யவும்!",
+                btnScanDoc: "📷 ஆதார்/ரேஷன் கார்டு ஸ்கேன்",
+                btnVoiceProfile: "🎙️ குரல் மூலம் விவரங்கள் கூறவும்",
+                lblPName: "முழு பெயர்:",
+                lblPAge: "வயது (ஆண்டுகள்):",
+                lblPGender: "பாலினம்:",
+                lblPOcc: "தொழில் / துறை:",
+                lblPIncome: "ஆண்டு குடும்ப வருமானம்:",
+                lblPCategory: "சமூக பிரிவு:",
+                lblPState: "மாநிலம்:",
+                lblPFamily: "குடும்ப உறுப்பினர்கள் எண்ணிக்கை:",
+                lblPSource: "முக்கிய வருமான ஆதாரம்:",
+                lblPEdu: "கல்வி தகுதி:",
+                lblPDisability: "மாற்றுத்திறனாளி நிலை:",
+                lblPLoan: "தற்போதைய வங்கி கடன்:",
+                btnSaveProfile: "💾 சுயவிவரம் சேமி & திட்டங்களை பார்",
+                titleSchemes: "படி 3: உங்களுக்கான அரசு திட்டங்கள்",
+                schemesInfoTitle: "AI சதவீத பொருத்தம் & அதிகாரப்பூர்வ இணையதளம்:",
+                schemesInfoDesc: "உங்கள் மொழி மற்றும் தொழிலுக்கு ஏற்ப திட்டங்கள் புதுப்பிக்கப்படும்.",
+                titleTracker: "படி 4: நேரலை விண்ணப்ப நிலை டிராக்கர்",
+                trackerInfoTitle: "உங்கள் விண்ணப்ப நிலையை கண்காணிக்கவும்:",
+                trackerInfoDesc: "உங்கள் 12 இலக்க விண்ணப்ப எண்ணை உள்ளிடவும்.",
+                lblTrackInput: "விண்ணப்ப எண் உள்ளிடவும்:",
+                btnDoTrack: "நிலையை பார்",
+                lblQuickDemo: "மாதிரி எண்கள்:",
+                tstep1: "விண்ணப்பம் சமர்ப்பிக்கப்பட்டது",
+                tstep2: "ஆதார் & இ-கேஒய்சி சரிபார்க்கப்பட்டது",
+                tstep3: "சிஎஸ்சி பயோமெட்ரிக் தணிக்கை",
+                tstep4: "வங்கி பிடிடி வரவு",
+                trackRemarks: "மக்கள் சேவை மையத்தில் பயோமெட்ரிக் சரிபார்ப்பு முடிந்தது.",
+                titleChatbox: "படி 5: அரசு விண்ணப்ப உதவி அரட்டை",
+                chatInfoTitle: "விண்ணப்பம் குறித்து கேள்விகள் உள்ளதா?",
+                chatInfoDesc: "தாமதம் அல்லது நிராகரிப்புக்கான காரணத்தை AI உதவியாளரிடம் கேட்கவும்.",
+                lblChatSample: "மாதிரி கேள்விகள்:",
+                btnSendChat: "கேள்வி அனுப்பு",
+                titleCsc: "படி 6: அருகில் உள்ள CSC மையங்கள் & கணக்கிடு",
+                cscBannerTitle: "CSC மையங்கள் & ஆவண ஸ்கேனிங்:",
+                cscBannerDesc: "பயோமெட்ரிக் சரிபார்ப்புக்கு அருகில் உள்ள சேவை மையத்திற்கு செல்லவும்.",
+                cscNearTitle: "பதிவு செய்யப்பட்ட பொது சேவை மையங்கள் (CSC):",
+                calcTitle: "கடன் & மானியக் கணக்கீட்டான்:",
+                calcLoan: "தேவையான கடன் தொகை (₹):",
+                calcSub: "அரசு மானிய சதவீதம் (%):",
+                calcTenure: "கடன் காலம் (ஆண்டுகள்):",
+                calcRate: "ஆண்டு வட்டி விகிதம் (%):",
+                btnCalcSubmit: "மானியம் & மாத தவணை (EMI) கணக்கிடு",
+                btnGovtLink: "🔗 அதிகாரப்பூர்வ இணையதளம்",
+                btnAudioRead: "🔊 குரலில் கேட்க",
+                btnApplyNow: "📝 ஆன்லைனில் விண்ணப்பிக்கவும்",
+                matchedFor: "உங்கள் தொழிலுக்கு ஏற்றது:"
+            }
+        };
+
+        let currentProfile = {
+            name: "Ramesh Kumar",
+            phone: "9876543210",
+            age: 42,
+            gender: "Male",
+            occupation: "Street Vendor",
+            income: "1-2.5 Lakhs",
+            category: "OBC",
+            state: "Maharashtra",
+            familyMembers: "4-6 Members",
+            incomeSource: "Self Employed",
+            education: "10th Pass",
+            disability: "No",
+            loan: "No"
+        };
+
+        let isLoggedIn = false;
+
+        // Function to switch visible tabs
+        function switchTab(tabId) {
+            document.querySelectorAll('.page-section').forEach(sec => sec.classList.remove('active'));
+            document.querySelectorAll('.nav-tab').forEach(btn => btn.classList.remove('active'));
+            
+            document.getElementById(tabId).classList.add('active');
+
+            if(tabId === 'sec-auth') document.getElementById('nav_auth').classList.add('active');
+            if(tabId === 'sec-profile') document.getElementById('nav_profile').classList.add('active');
+            if(tabId === 'sec-schemes') {
+                document.getElementById('nav_schemes').classList.add('active');
+                renderMatchingSchemes();
+            }
+            if(tabId === 'sec-tracker') document.getElementById('nav_tracker').classList.add('active');
+            if(tabId === 'sec-chatbox') document.getElementById('nav_chatbox').classList.add('active');
+            if(tabId === 'sec-csc') document.getElementById('nav_csc').classList.add('active');
+        }
+
+        // Language Switcher Handler - Updates ALL UI elements & Re-renders Schemes
+        function changeLanguage() {
+            const lang = document.getElementById('langSelect').value;
+            const dict = DICTIONARY[lang] || DICTIONARY["en-IN"];
+
+            // Header & Tabs
+            document.getElementById('lbl_app_title').innerText = dict.appTitle;
+            document.getElementById('lbl_app_subtitle').innerText = dict.appSubtitle;
+            document.getElementById('nav_auth').innerText = dict.tabAuth;
+            document.getElementById('nav_profile').innerText = dict.tabProfile;
+            document.getElementById('nav_schemes').innerText = dict.tabSchemes;
+            document.getElementById('nav_tracker').innerText = dict.tabTracker;
+            document.getElementById('nav_chatbox').innerText = dict.tabChatbox;
+            document.getElementById('nav_csc').innerText = dict.tabCsc;
+
+            // Auth Step 1
+            document.getElementById('title_auth').innerText = dict.titleAuth;
+            document.getElementById('auth_info_title').innerText = dict.authInfoTitle;
+            document.getElementById('auth_info_desc').innerText = dict.authInfoDesc;
+            document.getElementById('lbl_phone').innerText = dict.lblPhone;
+            document.getElementById('lbl_fullname').innerText = dict.lblFullname;
+            document.getElementById('lbl_password').innerText = dict.lblPassword;
+            document.getElementById('btn_send_otp').innerText = dict.btnSendOtp;
+
+            // Profile Step 2
+            document.getElementById('title_profile').innerText = dict.titleProfile;
+            document.getElementById('scan_box_title').innerText = dict.scanBoxTitle;
+            document.getElementById('scan_box_desc').innerText = dict.scanBoxDesc;
+            document.getElementById('btn_scan_doc').innerText = dict.btnScanDoc;
+            document.getElementById('btn_voice_profile').innerText = dict.btnVoiceProfile;
+            document.getElementById('lbl_p_name').innerText = dict.lblPName;
+            document.getElementById('lbl_p_age').innerText = dict.lblPAge;
+            document.getElementById('lbl_p_gender').innerText = dict.lblPGender;
+            document.getElementById('lbl_p_occ').innerText = dict.lblPOcc;
+            document.getElementById('lbl_p_income').innerText = dict.lblPIncome;
+            document.getElementById('lbl_p_category').innerText = dict.lblPCategory;
+            document.getElementById('lbl_p_state').innerText = dict.lblPState;
+            document.getElementById('lbl_p_family').innerText = dict.lblPFamily;
+            document.getElementById('lbl_p_source').innerText = dict.lblPSource;
+            document.getElementById('lbl_p_edu').innerText = dict.lblPEdu;
+            document.getElementById('lbl_p_disability').innerText = dict.lblPDisability;
+            document.getElementById('lbl_p_loan').innerText = dict.lblPLoan;
+            document.getElementById('btn_save_profile').innerText = dict.btnSaveProfile;
+
+            // Schemes Step 3
+            document.getElementById('title_schemes').innerText = dict.titleSchemes;
+            document.getElementById('schemes_info_title').innerText = dict.schemesInfoTitle;
+            document.getElementById('schemes_info_desc').innerText = dict.schemesInfoDesc;
+
+            // Tracker Step 4
+            document.getElementById('title_tracker').innerText = dict.titleTracker;
+            document.getElementById('tracker_info_title').innerText = dict.trackerInfoTitle;
+            document.getElementById('tracker_info_desc').innerText = dict.trackerInfoDesc;
+            document.getElementById('lbl_track_input').innerText = dict.lblTrackInput;
+            document.getElementById('btn_do_track').innerText = dict.btnDoTrack;
+            document.getElementById('lbl_quick_demo').innerText = dict.lblQuickDemo;
+            document.getElementById('tslabel1').innerText = dict.tstep1;
+            document.getElementById('tslabel2').innerText = dict.tstep2;
+            document.getElementById('tslabel3').innerText = dict.tstep3;
+            document.getElementById('tslabel4').innerText = dict.tstep4;
+
+            // Chatbox Step 5
+            document.getElementById('title_chatbox').innerText = dict.titleChatbox;
+            document.getElementById('chat_info_title').innerText = dict.chatInfoTitle;
+            document.getElementById('chat_info_desc').innerText = dict.chatInfoDesc;
+            document.getElementById('lbl_chat_sample').innerText = dict.lblChatSample;
+            document.getElementById('btn_send_chat').innerText = dict.btnSendChat;
+
+            // CSC Step 6
+            document.getElementById('title_csc').innerText = dict.titleCsc;
+            document.getElementById('lbl_csc_banner_title').innerText = dict.cscBannerTitle;
+            document.getElementById('lbl_csc_banner_desc').innerText = dict.cscBannerDesc;
+            document.getElementById('lbl_csc_near_title').innerText = dict.cscNearTitle;
+            document.getElementById('lbl_calc_title').innerText = dict.calcTitle;
+            document.getElementById('lbl_calc_loan').innerText = dict.calcLoan;
+            document.getElementById('lbl_calc_sub').innerText = dict.calcSub;
+            document.getElementById('lbl_calc_tenure').innerText = dict.calcTenure;
+            document.getElementById('lbl_calc_rate').innerText = dict.calcRate;
+            document.getElementById('btn_calc_submit').innerText = dict.btnCalcSubmit;
+
+            if (isLoggedIn) {
+                document.getElementById('userBadge').innerText = dict.loggedInAs;
+            } else {
+                document.getElementById('userBadge').innerText = dict.notLoggedIn;
+            }
+
+            // Re-render schemes in chosen language
+            renderMatchingSchemes();
+        }
+
+        // Step 1: Trigger Mock OTP Modal
+        function triggerOTPModal() {
+            const phone = document.getElementById('regPhone').value;
+            if(!phone || phone.length < 10) {
+                alert('Please enter a valid 10-digit mobile number!');
+                return;
+            }
+            document.getElementById('modalPhoneNum').innerText = phone;
+            document.getElementById('otpModal').style.display = 'flex';
+        }
+
+        function closeOTPModal() {
+            document.getElementById('otpModal').style.display = 'none';
+        }
+
+        function verifyOTP() {
+            const code = document.getElementById('otpCode').value;
+            if (code === "1234" || code.trim() !== "") {
+                isLoggedIn = true;
+                const lang = document.getElementById('langSelect').value;
+                const dict = DICTIONARY[lang] || DICTIONARY["en-IN"];
+                document.getElementById('userBadge').innerText = dict.loggedInAs;
+                document.getElementById('userBadge').style.backgroundColor = '#28a745';
+                document.getElementById('userBadge').style.color = '#ffffff';
+
+                closeOTPModal();
+                alert('✅ OTP Verified Successfully! Mobile phone authenticated.');
+                switchTab('sec-profile');
+            } else {
+                alert('Invalid OTP Code! Use 1234 for demo.');
+            }
+        }
+
+        // Step 2: Simulate Document OCR Scan
+        function simulateDocumentScan() {
+            alert('📷 Document Scanner active: Scanning Aadhaar Card / Ration Card QR Code...');
+            setTimeout(() => {
+                document.getElementById('profName').value = "Ramesh Kumar";
+                document.getElementById('profAge').value = 42;
+                document.getElementById('profGender').value = "Male";
+                document.getElementById('profOccupation').value = "Street Vendor";
+                document.getElementById('profIncome').value = "1-2.5 Lakhs";
+                document.getElementById('profCategory').value = "OBC";
+                document.getElementById('profState').value = "Maharashtra";
+                document.getElementById('profFamilyMembers').value = "4-6 Members";
+                document.getElementById('profIncomeSource').value = "Self Employed";
+                document.getElementById('profEducation').value = "10th Pass";
+                document.getElementById('profDisability').value = "No";
+                document.getElementById('profLoan').value = "No";
+                
+                autoUpdateSchemesOnProfileChange();
+                alert('✅ OCR Scan Complete! Profile fields automatically populated from document.');
+            }, 800);
+        }
+
+        // Voice Command Input Simulation
+        function startVoiceInput() {
+            const statusDiv = document.getElementById('voiceStatus');
+            statusDiv.innerText = '🎙️ Listening... Speak your details (e.g., "Farmer, Maharashtra, 1 Lakh income")';
+            
+            if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+                const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                const recognition = new SpeechRecognition();
+                recognition.lang = document.getElementById('langSelect').value;
+                recognition.onresult = function(event) {
+                    const transcript = event.results[0][0].transcript;
+                    statusDiv.innerText = `Captured Voice: "${transcript}"`;
+                    alert(`Voice Command Heard: "${transcript}"`);
+                };
+                recognition.onerror = function() {
+                    statusDiv.innerText = 'Voice recognition simulated: Captured speech preferences.';
+                };
+                recognition.start();
+            } else {
+                setTimeout(() => {
+                    statusDiv.innerText = '🎙️ Simulated Voice Input: "Farmer, Maharashtra, Income 1.5 Lakhs"';
+                    document.getElementById('profOccupation').value = "Farmer";
+                    autoUpdateSchemesOnProfileChange();
+                }, 1500);
+            }
+        }
+
+        // Save Profile Form & Auto Update Schemes
+        function autoUpdateSchemesOnProfileChange() {
+            currentProfile = {
+                name: document.getElementById('profName').value || "Ramesh Kumar",
+                phone: document.getElementById('regPhone').value || "9876543210",
+                age: parseInt(document.getElementById('profAge').value) || 42,
+                gender: document.getElementById('profGender').value,
+                occupation: document.getElementById('profOccupation').value,
+                income: document.getElementById('profIncome').value,
+                category: document.getElementById('profCategory').value,
+                state: document.getElementById('profState').value,
+                familyMembers: document.getElementById('profFamilyMembers').value,
+                incomeSource: document.getElementById('profIncomeSource').value,
+                education: document.getElementById('profEducation').value,
+                disability: document.getElementById('profDisability').value,
+                loan: document.getElementById('profLoan').value
+            };
+
+            renderMatchingSchemes();
+        }
+
+        function saveProfile(e) {
+            e.preventDefault();
+            autoUpdateSchemesOnProfileChange();
+            alert(`✅ Profile details updated for "${currentProfile.occupation}"!\n\nViewing new tailored schemes now.`);
+            switchTab('sec-schemes');
+        }
+
+        // Step 3: Render Schemes in Chosen Language
+        function renderMatchingSchemes() {
+            const container = document.getElementById('schemesList');
+            container.innerHTML = '';
+
+            const lang = document.getElementById('langSelect').value;
+            const dict = DICTIONARY[lang] || DICTIONARY["en-IN"];
+
+            // Calculate percentage match for each scheme
+            const evaluatedSchemes = SCHEME_DATABASE.map(scheme => {
+                let matchScore = 40;
+
+                if (scheme.occupation.includes(currentProfile.occupation)) {
+                    matchScore += 45;
+                } else if (scheme.occupation.includes("Small Business Owner") || scheme.occupation.includes("Unemployed Youth")) {
+                    matchScore += 15;
+                }
+
+                if (scheme.maxIncome === currentProfile.income || scheme.maxIncome === "Above 5 Lakhs") {
+                    matchScore += 15;
+                }
+
+                if (currentProfile.loan === "No" && scheme.loanAllowed === "Yes") {
+                    matchScore += 8;
+                }
+
+                const finalPercentage = Math.min(Math.max(matchScore, 40), 98);
+
+                return {
+                    ...scheme,
+                    matchPercentage: finalPercentage
+                };
+            });
+
+            evaluatedSchemes.sort((a, b) => b.matchPercentage - a.matchPercentage);
+
+            evaluatedSchemes.forEach(sc => {
+                const card = document.createElement('div');
+                card.className = 'scheme-card';
+
+                const titleText = sc.title[lang] || sc.title["en-IN"];
+                const benefitText = sc.benefit[lang] || sc.benefit["en-IN"];
+                const reqText = sc.requirements[lang] || sc.requirements["en-IN"];
+
+                card.innerHTML = `
+                    <div class="scheme-header">
+                        <h3 class="scheme-title">${titleText}</h3>
+                        <span class="match-badge" style="background-color:${sc.matchPercentage >= 80 ? '#28a745' : '#17a2b8'};">🎯 ${sc.matchPercentage}% Match</span>
+                    </div>
+                    <div class="scheme-details">
+                        <p><strong>Sector:</strong> ${sc.occupation.join(', ')}</p>
+                        <p><strong>Benefits:</strong> ${benefitText}</p>
+                        <p><strong>Requirements:</strong> ${reqText}</p>
+                    </div>
+                    <div class="scheme-actions">
+                        <a href="${sc.websiteUrl}" target="_blank" class="btn btn-govt-link">${dict.btnGovtLink}</a>
+                        <button class="btn btn-warning" onclick="speakSchemeDetails('${sc.id}')">${dict.btnAudioRead}</button>
+                        <button class="btn btn-success" onclick="openApplyModal('${escape(titleText)}')">${dict.btnApplyNow}</button>
+                    </div>
+                `;
+
+                container.appendChild(card);
+            });
+        }
+
+        // Text-to-Speech Output in Selected Language
+        function speakSchemeDetails(schemeId) {
+            const lang = document.getElementById('langSelect').value;
+            const scheme = SCHEME_DATABASE.find(s => s.id == schemeId);
+            if(!scheme) return;
+
+            const titleText = scheme.title[lang] || scheme.title["en-IN"];
+            const benefitText = scheme.benefit[lang] || scheme.benefit["en-IN"];
+            const textToSpeak = `${titleText}. ${benefitText}`;
+
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                const utterance = new SpeechSynthesisUtterance(textToSpeak);
+                utterance.lang = lang;
+                utterance.rate = 0.85;
+                window.speechSynthesis.speak(utterance);
+                alert(`🔊 Reading Aloud (${lang}):\n\n"${textToSpeak}"`);
+            } else {
+                alert(`Audio Playback (${lang}):\n"${textToSpeak}"`);
+            }
+        }
+
+        // Self Apply Modal
+        function openApplyModal(nameEsc) {
+            const name = unescape(nameEsc);
+            document.getElementById('applySchemeName').innerText = name;
+            document.getElementById('applyModal').style.display = 'flex';
+        }
+
+        function confirmApplicationSubmit() {
+            const newRefId = 'SCH-2026-' + Math.floor(100000 + Math.random() * 900000);
+            alert(`🎉 Application Successfully Submitted!\n\nRef ID: ${newRefId}`);
+            document.getElementById('applyModal').style.display = 'none';
+
+            document.getElementById('trackInput').value = newRefId;
+            quickTrack(newRefId);
+            switchTab('sec-tracker');
+        }
+
+        // Step 4: Application Status Tracker Logic
+        function quickTrack(refId) {
+            document.getElementById('trackInput').value = refId;
+            trackApplication();
+        }
+
+        function trackApplication() {
+            const refId = document.getElementById('trackInput').value.trim();
+            if (!refId) {
+                alert('Please enter an Application Reference ID!');
+                return;
+            }
+
+            document.getElementById('trackRefId').innerText = refId;
+            alert(`🔍 Application Tracker loaded for Ref ID: ${refId}`);
+        }
+
+        // Step 5: Govt Query Chatbox
+        function sendQuickQuery(text) {
+            document.getElementById('chatInput').value = text;
+            sendChatMessage();
+        }
+
+        function sendChatMessage() {
+            const input = document.getElementById('chatInput');
+            const text = input.value.trim();
+            if (!text) return;
+
+            const messagesDiv = document.getElementById('chatMessages');
+
+            const userMsg = document.createElement('div');
+            userMsg.className = 'message user';
+            userMsg.innerHTML = `<strong>You:</strong> ${text}`;
+            messagesDiv.appendChild(userMsg);
+
+            input.value = '';
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+
+            setTimeout(() => {
+                const govtMsg = document.createElement('div');
+                govtMsg.className = 'message govt';
+                let reply = "Your query has been logged into the National Citizen Grievance Portal. Verification is in progress.";
+
+                govtMsg.innerHTML = `<strong>Govt Support Assistant:</strong> ${reply}`;
+                messagesDiv.appendChild(govtMsg);
+                messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            }, 700);
+        }
+
+        // Step 6: Loan & Subsidy Calculator
+        function calculateSubsidy() {
+            const loan = parseFloat(document.getElementById('calcLoan').value) || 0;
+            const subsidyPct = parseFloat(document.getElementById('calcSubsidy').value) || 0;
+            const tenureYears = parseFloat(document.getElementById('calcTenure').value) || 1;
+            const rate = parseFloat(document.getElementById('calcRate').value) || 7;
+
+            const subsidyAmt = (loan * subsidyPct) / 100;
+            const netLoan = loan - subsidyAmt;
+            const monthlyRate = (rate / 100) / 12;
+            const totalMonths = tenureYears * 12;
+
+            const emi = (netLoan * monthlyRate * Math.pow(1 + monthlyRate, totalMonths)) / (Math.pow(1 + monthlyRate, totalMonths) - 1);
+
+            const resultDiv = document.getElementById('calcResult');
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = `
+                <h4 style="color:#003366; margin-top:0;">📊 Calculation Breakdown:</h4>
+                <p><strong>Sanctioned Loan:</strong> ₹${loan.toLocaleString('en-IN')}</p>
+                <p><strong>Govt Grant (${subsidyPct}%):</strong> <span style="color:#28a745; font-weight:bold;">- ₹${subsidyAmt.toLocaleString('en-IN')}</span></p>
+                <p><strong>Net Loan Repayable:</strong> ₹${netLoan.toLocaleString('en-IN')}</p>
+                <p style="font-size:19px; color:#003366;"><strong>Estimated Monthly EMI:</strong> <span style="background-color:#ffcc00; padding:4px 8px; border-radius:4px; font-weight:bold;">₹${Math.round(emi).toLocaleString('en-IN')} / month</span></p>
+            `;
+        }
+
+        // Initial setup on load
+        window.onload = function() {
+            document.getElementById('profName').value = currentProfile.name;
+            document.getElementById('profAge').value = currentProfile.age;
+            document.getElementById('profGender').value = currentProfile.gender;
+            document.getElementById('profOccupation').value = currentProfile.occupation;
+            document.getElementById('profIncome').value = currentProfile.income;
+            document.getElementById('profCategory').value = currentProfile.category;
+            document.getElementById('profState').value = currentProfile.state;
+            document.getElementById('profFamilyMembers').value = currentProfile.familyMembers;
+            document.getElementById('profIncomeSource').value = currentProfile.incomeSource;
+            document.getElementById('profEducation').value = currentProfile.education;
+            document.getElementById('profDisability').value = currentProfile.disability;
+            document.getElementById('profLoan').value = currentProfile.loan;
+
+            changeLanguage();
+        };
+    </script>
+</body>
+</html>
